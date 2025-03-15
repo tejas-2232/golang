@@ -41,3 +41,18 @@
 7. Go has a large and growing community of developers and is used by many well-known companies, including Google, Uber, and Dropbox.
 
 <hr>
+
+### Important points to remember
+
+1. Go is statically typed which means - the type of variable must be decaled before it is used
+
+2. Go has built-in garbage collector - it automatically frees up memory when it is no longer required
+
+3. Go has strong support of concurrency - allows developers to write efficient and scalable code for multicore & distributed system
+
+4. It has minimalistic syntax - that is easy to learn and read
+
+5. It has a fast compiler - generates code that is optimized for modern hardware architectures
+
+6. It has standard library that provides support for a wide range of functionalty including networking, encryption  and file handling
+
