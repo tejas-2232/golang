@@ -56,3 +56,24 @@
 
 6. It has standard library that provides support for a wide range of functionalty including networking, encryption  and file handling
 
+```go
+1. package main
+2. import "fmt"
+
+3. func main() {
+4.    fmt.Println("Hello, World!")
+5. }
+```
+__Output:__ > Hello, World!
+
+__Explanation:__
+
+Line1: contains `package main` of program. It's initial point to run the program
+
+Line2:  `import fmt`  - used to incude external package that provide additional functionality beyond the built-in laguage feature. <br> `fmt` is package which provides functions for formatting input and output.
+
+Line3: `main function`  - beginning of execution of program
+
+Line4: `fmt.Println()` - std library func to print something as output. Here `fmt` has transmitted Println method which is used to display output.
+
+
