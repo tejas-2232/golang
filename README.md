@@ -70,10 +70,41 @@ __Explanation:__
 
 Line1: contains `package main` of program. It's initial point to run the program
 
-Line2:  `import fmt`  - used to incude external package that provide additional functionality beyond the built-in laguage feature. <br> `fmt` is package which provides functions for formatting input and output.
+Line2:  `import fmt`  - used to include external package that provide additional functionality beyond the built-in language feature. <br> `fmt` is package which provides functions for formatting input and output.
 
 Line3: `main function`  - beginning of execution of program
 
 Line4: `fmt.Println()` - std library func to print something as output. Here `fmt` has transmitted Println method which is used to display output.
 
 
+__Single Line Comment:__
+
+__Syntax:__
+
+```go
+// single line comment 
+```
+__Multi-line Comment:__ 
+
+__Syntax:__
+
+```go
+/* multiline comment */
+```
+
+
+#### Some popular Applications developed in Go Language
+
+__Docker:__ a set of tools for deploying linux containers
+
+__Openshift:__ a cloud computing platform as a service by Red Hat.
+
+__Kubernetes:__ The future of seamlessly automated deployment processes
+
+__Dropbox:__ migrated some of their critical components from Python to Go.
+
+__Netflix:__ for two part of their server architecture.
+
+__InfluxDB:__ is an open-source time series database developed by InfluxData.
+
+__Golang:__ The language itself was written in Go.
