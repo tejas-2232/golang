@@ -91,9 +91,9 @@ __Syntax:__
 ```go
 /* multiline comment */
 ```
+<hr>
 
-
-#### Some popular Applications developed in Go Language
+### Some popular Applications developed in Go Language
 
 __Docker:__ a set of tools for deploying linux containers
 
@@ -108,3 +108,16 @@ __Netflix:__ for two part of their server architecture.
 __InfluxDB:__ is an open-source time series database developed by InfluxData.
 
 __Golang:__ The language itself was written in Go.
+
+### how golang fits in the DevOps Ecosystem
+
+1. Custom infrastructure automation
+2. Kubernetes development
+3. Miscroservices architecture
+4. CI/CD pipeline customization
+5. Monitoring and observability
+6. Cloud-native components 
+7. Automation tooling
+8. Security enhancements
+9. Performance and scalibility
+10. Rich library ecosystem
