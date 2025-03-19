@@ -45,21 +45,55 @@ Anonymous functions can accept arguments.*/
 You can also pas an anonymous func as argument to another function
 */
 
+// package main
+
+// import "fmt"
+
+// func galaxy(i func(p, q string) string) {
+// 	fmt.Println(i("Golden ", "Hour "))
+// }
+
+// // Think of i as a placeholder for a function.
+// // Just like we pass integers or strings as arguments, we are passing a function here.
+
+// func main() {
+
+// 	value := func(p, q string) string {
+// 		return p + q + "at beach"
+// 	}
+// 	galaxy(value) // The galaxy function is called with value as its argument
+// }
+
+// Example: Multiple Function Parameters
+
 package main
 
-import "fmt"
+import (
+	"fmt"
+	"strings"
+)
 
-func galaxy(i func(p, q string) string) {
-	fmt.Println(i("Golden ", "Hour "))
+func process(a, b string, f1 func(string, string) string, f2 func(string) string) {
+
+	result := f1(a, b)        //call first function
+	finalresult := f2(result) // call second function
+	fmt.Println(finalresult)
 }
-
-// Think of i as a placeholder for a function.
-// Just like we pass integers or strings as arguments, we are passing a function here.
 
 func main() {
 
-	value := func(p, q string) string {
-		return p + q + "at beach"
+	// firts anonymous functions concats 2 strings
+	concat := func(p, q string) string {
+
+		return p + " & " + q
 	}
-	galaxy(value) // The galaxy function is called with value as its argument
+
+	toUpper := func(s string) string { //convert string to upper case
+		return strings.ToUpper(s)
+	}
+
+	//call process with 2 functions
+
+	process("Golder Hour ", "Beach Sunset", concat, toUpper)
+
 }
