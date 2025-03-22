@@ -4,6 +4,9 @@ This function is declared implicitly, so you cannot reference it from anywhere a
 function in the same program and they execute in the order they are created.
 You are allowed to create init() function anywhere in the program and they are called in lexical file name order (Alphabetical Order)
 
+ The main purpose of the init() function is to initialize the global variables that cannot be
+ initialized in the global context.
+
 */
 
 package main
