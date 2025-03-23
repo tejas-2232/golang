@@ -6,33 +6,60 @@ but they don’t execute until the nearby functions returns. You can create a de
 */
 // concept of the defer statement
 
+// package main
+
+// import "fmt"
+
+// func mul(a1, a2 int) int {
+
+// 	res := a1 * a2
+// 	fmt.Println("Result= ", res)
+// 	return 0
+// }
+
+// func show() {
+// 	fmt.Println("Hello there")
+// }
+
+// func main() {
+// 	// Calling mul() function
+// 	// Here mul function behaves
+// 	// like a normal function
+// 	mul(20, 5)
+
+// 	// Calling mul()function Using defer keyword
+// 	// Here the mul() function is defer function
+
+// 	defer mul(20, 5)
+
+// 	// Calling show() function
+// 	show()
+
+// }
+
+// Example 2
+
+// Go program to illustrate
+// multiple defer statements, to illustrate LIFO policy
+
 package main
 
 import "fmt"
 
 func mul(a1, a2 int) int {
-
-	res := a1 * a2
-	fmt.Println("Result= ", res)
+	res1 := a1 + a2
+	fmt.Println("Result= ", res1)
 	return 0
 }
 
-func show() {
-	fmt.Println("Hello there")
-}
-
 func main() {
-	// Calling mul() function
-	// Here mul function behaves
-	// like a normal function
-	mul(20, 5)
 
-	// Calling mul()function Using defer keyword
-	// Here the mul() function is defer function
+	fmt.Println("Start")
 
-	defer mul(30, 4)
+	defer fmt.Println("End") // 3rd
 
-	// Calling show() function
-	show()
+	defer mul(12, 12) // = 24  // 2nd
+
+	defer mul(10, 30) // = 40  // 1st
 
 }
