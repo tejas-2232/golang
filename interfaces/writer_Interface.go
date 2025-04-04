@@ -10,6 +10,8 @@ type Person struct {
 }
 
 // write String function
+// p is called receiver variable:
+//   - it is similar to "this" in other prog. languages like java, python
 func (p Person) String() string {
 
 	return "hello- my name is " + p.Name // accessing Person struct using p
