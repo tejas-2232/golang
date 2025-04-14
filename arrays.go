@@ -9,3 +9,5 @@ func main() {
 
 	fmt.Println("Array=", arr1)
 }
+
+//copying array
