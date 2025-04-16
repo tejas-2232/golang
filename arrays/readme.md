@@ -33,7 +33,7 @@ func main() {
 }
 ```
 
-## method 1: Direct Assignment (Only Works with Arrays, Not Slices)
+## method 2: Direct Assignment (Only Works with Arrays, Not Slices)
 
 You can assign one array to another if they are of the same type and length. This method doesn’t work with slices.
 
@@ -61,4 +61,10 @@ func main() {
 
 }
 ```
+
+## method 3: Using Pointers (If Arrays are Large)
+
+
+If you are working with large arrays and want to avoid copying, you can use pointers to reference the source array. This won't create a new array but will point to the existing array's memory location
+
 
