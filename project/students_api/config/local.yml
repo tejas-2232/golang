@@ -1,0 +1,10 @@
+env: "dev"
+
+#sqlite db path
+storage_path: "storage/storage.db"
+
+#server config
+http_server:
+  address: "localhost:8082"
+
+#you can also add timeout
