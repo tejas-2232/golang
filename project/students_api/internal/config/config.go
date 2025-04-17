@@ -4,6 +4,8 @@ import (
 	"flag"
 	"log"
 	"os"
+
+	"github.com/ilyakaznacheev/cleanenv"
 )
 
 type HTTPServer struct {
@@ -15,15 +17,15 @@ type HTTPServer struct {
 
 type Config struct {
 	//use struct annotations below for each type
-
 	Env          string `yaml:"env" env:"ENV" env-required:"true"`
 	storage_path string `yaml:"storage+path" env-required:"true"`
-
-	HTTPServer `yaml:http_server`
+	HTTPServer   `yaml:http_server`
 }
 
 // if there is error
-func MustLoad() {
+// MustLoad function is returning the pointer of Config Struct
+
+func MustLoad() *Config {
 	var configPath string
 
 	configPath = os.Getenv("CONFIG_PATH")
@@ -44,12 +46,18 @@ func MustLoad() {
 
 	} //if
 
-	// if there's a file avaiabel on path
+	// check if there's a file availabel on path
 
 	if _, err := os.Stat(configPath); os.IsNotExist(err) {
-
-		log.Fatalf("Config file does not exist: %s", configPath)
-
+		log.Fatalf("Config file does not exist: %s", configPath) //Fatalf is used as we are formatting it with configPath
 	}
 
+	var cfg Config // var cfg - is of type is Config
+
+	err := cleanenv.ReadConfig(configPath, &cfg)
+
+	if err != nil {
+		log.Fatalf("can't read config file: %s", err.Error())
+	}
+	return &cfg // returning the address
 }
