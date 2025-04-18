@@ -9,17 +9,17 @@ import (
 )
 
 type HTTPServer struct {
-	Addr string `yaml:"address" env-required:"true`
+	Addr string `yaml:"address"`
 }
 
 // add HTTPServer struct to below struct
-// strcut embedding
+// struct embedding
 
 type Config struct {
 	//use struct annotations below for each type
-	Env          string `yaml:"env" env:"ENV" env-required:"true"`
-	storage_path string `yaml:"storage+path" env-required:"true"`
-	HTTPServer   `yaml:http_server`
+	Env         string `yaml:"env" env:"ENV" env-required:"true"`
+	StoragePath string `yaml:"storage_path" env-required:"true"`
+	HTTPServer  `yaml:"http_server"`
 }
 
 // if there is error
