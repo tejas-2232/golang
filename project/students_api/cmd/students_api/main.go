@@ -12,6 +12,7 @@ import (
 	"time"
 
 	"github.com/tejas-2232/students_api/internal/config"
+	"github.com/tejas-2232/students_api/internal/http/handlers/student"
 )
 
 func main() {
@@ -21,16 +22,15 @@ func main() {
 	// setup router
 	router := http.NewServeMux()
 
-	router.HandleFunc("GET /", func(w http.ResponseWriter, r *http.Request) {
-		// return data
-		w.Write([]byte("Welcome to students API")) //converting string to byte slice & passing to write func
-	})
+	router.HandleFunc("POST /api/students", student.New())
 
 	// setup server
 	server := http.Server{
 		Addr:    cfg.Addr,
 		Handler: router,
 	}
+
+	slog.Info("server started %s", slog.String("address", cfg.HTTPServer.Addr))
 
 	fmt.Printf("server started %s", cfg.HTTPServer.Addr)
 
@@ -54,11 +54,12 @@ func main() {
 	slog.Info("Shutting down the server")
 
 	//saving in var ctx(context)
+	// passing the time through context.
+
 	ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
 	defer cancel()
 
 	err := server.Shutdown(ctx)
-
 	//logging
 	if err != nil {
 		slog.Error("failed to shutdown server", slog.String("error", err.Error()))
