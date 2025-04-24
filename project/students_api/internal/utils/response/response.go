@@ -3,6 +3,8 @@ package response
 import (
 	"encoding/json"
 	"net/http"
+
+	"github.com/go-playground/validator"
 )
 
 type Response struct {
@@ -37,5 +39,13 @@ func GeneralError(err error) Response {
 	return Response{
 		Status: StatusError,
 		Error:  err.Error(),
+	}
+}
+
+func ValidationError(errs validator.ValidationErros) Response {
+	var errMsgs []string //create slice os string
+
+	for _, err := range errs {
+
 	}
 }
