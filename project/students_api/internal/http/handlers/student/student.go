@@ -8,6 +8,7 @@ import (
 	"log/slog"
 	"net/http"
 
+	"github.com/go-playground/validator"
 	"github.com/tejas-2232/students_api/internal/types"
 	"github.com/tejas-2232/students_api/internal/utils/response"
 )
@@ -16,6 +17,7 @@ func New() http.HandlerFunc {
 	// return data
 	return func(w http.ResponseWriter, r *http.Request) {
 
+		slog.Info("creating a student")
 		var student types.Student //see this struct in types/types.go
 
 		//r in r.Body can implement Decoder interface
@@ -25,10 +27,20 @@ func New() http.HandlerFunc {
 			response.WriteJson(w, http.StatusBadRequest, response.GeneralError(fmt.Errorf("empty body"))) // code 400
 			return
 		}
+		// IF error is other than empty body
+
+		if err != nil{
+			response.WriteJson(w, http.StatusBadRequest, response.GeneralError(err))
+			return
+		}
+		
+		// request validation
+		if err != validator.New().Struct(student); err!= nil{
+			response.WriteJson(w http.StatusBadRequest,  )
+		}
 
 		// serialize
 		// send json data to struct
-		slog.Info("creating a student")
 
 		// w.Write([]byte("Welcome to students API")) //converting string to byte slice & passing to write func
 
