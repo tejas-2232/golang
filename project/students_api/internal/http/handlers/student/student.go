@@ -29,14 +29,17 @@ func New() http.HandlerFunc {
 		}
 		// IF error is other than empty body
 
-		if err != nil{
+		if err != nil {
 			response.WriteJson(w, http.StatusBadRequest, response.GeneralError(err))
 			return
 		}
-		
+
 		// request validation
-		if err != validator.New().Struct(student); err!= nil{
-			response.WriteJson(w http.StatusBadRequest,  )
+		if err := validator.New().Struct(student); err != nil {
+			validateErrs := err.(validator.ValidationErrors)
+
+			response.WriteJson(w, http.StatusBadRequest, response.ValidationError(validateErrs))
+			return
 		}
 
 		// serialize
