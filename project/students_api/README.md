@@ -52,3 +52,7 @@ func main() {
 	fmt.Println(version)
 }
 ```
+
+We will be using TablePlus for Graphical User Interface
+
+![alt text](assets/image.png)
