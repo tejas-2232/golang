@@ -8,7 +8,7 @@ import (
 	"log/slog"
 	"net/http"
 
-	"github.com/go-playground/validator"
+	"github.com/go-playground/validator/v10"
 	"github.com/tejas-2232/students_api/internal/types"
 	"github.com/tejas-2232/students_api/internal/utils/response"
 )
@@ -36,15 +36,13 @@ func New() http.HandlerFunc {
 
 		// request validation
 		if err := validator.New().Struct(student); err != nil {
-			validateErrs := err.(validator.ValidationErrors)
+			validateErrs := err.(validator.ValidationErrors) //type casting the error, type is ValidationErrors
 
 			response.WriteJson(w, http.StatusBadRequest, response.ValidationError(validateErrs))
 			return
 		}
-
 		// serialize
 		// send json data to struct
-
 		// w.Write([]byte("Welcome to students API")) //converting string to byte slice & passing to write func
 
 		response.WriteJson(w, http.StatusCreated, map[string]string{"success": "OK"}) // code 201- created

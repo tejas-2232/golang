@@ -2,14 +2,16 @@ package response
 
 import (
 	"encoding/json"
+	"fmt"
 	"net/http"
+	"strings"
 
-	"github.com/go-playground/validator"
+	"github.com/go-playground/validator/v10"
 )
 
 type Response struct {
-	Status string `json:"status`
-	Error  string `json:"error` // "Error" will be displayed as "error"
+	Status string `json:"status"`
+	Error  string `json:"error"` // "Error" will be displayed as "error"
 } // because we want to send a json like that if we get any error
 
 const (
@@ -42,10 +44,19 @@ func GeneralError(err error) Response {
 	}
 }
 
-func ValidationError(errs validator.ValidationErros) Response {
+func ValidationError(errs validator.ValidationErrors) Response {
 	var errMsgs []string //create slice os string
 
 	for _, err := range errs {
-
+		switch err.ActualTag() {
+		case "required":
+			errMsgs = append(errMsgs, fmt.Sprintf("field %s is requierd field", err.Field()))
+		default:
+			errMsgs = append(errMsgs, fmt.Sprintf("Field %s is invalid ", err.Field()))
+		}
+	}
+	return Response{
+		Status: StatusError,
+		Error:  strings.Join(errMsgs, ", "),
 	}
 }
