@@ -13,16 +13,26 @@ import (
 
 	"github.com/tejas-2232/students_api/internal/config"
 	"github.com/tejas-2232/students_api/internal/http/handlers/student"
+	"github.com/tejas-2232/students_api/internal/storage/sqlite"
 )
 
 func main() {
 	// load config
 	cfg := config.MustLoad()
 
+	//database setup
+	storage, err := sqlite.New(cfg)
+
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	slog.Info("Storage Initialized", slog.String("env", cfg.Env), slog.String("version", "1.0.0)"))
+
 	// setup router
 	router := http.NewServeMux()
 
-	router.HandleFunc("POST /api/students", student.New())
+	router.HandleFunc("POST /api/students", student.New(storage))
 
 	// setup server
 	server := http.Server{
@@ -59,13 +69,10 @@ func main() {
 	ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
 	defer cancel()
 
-	err := server.Shutdown(ctx)
-	//logging
-	if err != nil {
+	if err := server.Shutdown(ctx); err != nil {
+		//logging
 		slog.Error("failed to shutdown server", slog.String("error", err.Error()))
 		// slog.String is used to concatenate the error
 	}
-
 	slog.Info("Server shutdown successfully")
-
 }
