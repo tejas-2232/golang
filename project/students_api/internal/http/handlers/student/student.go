@@ -9,11 +9,12 @@ import (
 	"net/http"
 
 	"github.com/go-playground/validator/v10"
+	"github.com/tejas-2232/students_api/internal/storage"
 	"github.com/tejas-2232/students_api/internal/types"
 	"github.com/tejas-2232/students_api/internal/utils/response"
 )
 
-func New() http.HandlerFunc {
+func New(storage storage.Storage) http.HandlerFunc {
 	// return data
 	return func(w http.ResponseWriter, r *http.Request) {
 
