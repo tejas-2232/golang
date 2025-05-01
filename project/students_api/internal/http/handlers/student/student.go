@@ -42,10 +42,18 @@ func New(storage storage.Storage) http.HandlerFunc {
 			response.WriteJson(w, http.StatusBadRequest, response.ValidationError(validateErrs))
 			return
 		}
+
+		lastId, err := storage.CreateStudent(student.Name, student.Email, student.Age) //storage is from func New() as a dependency
+
+		slog.Info("Student created successfully", slog.String("userId", fmt.Sprint(lastId)))
+		if err != nil {
+			response.WriteJson(w, http.StatusInternalServerError, err)
+			return
+		}
+
 		// serialize
 		// send json data to struct
 		// w.Write([]byte("Welcome to students API")) //converting string to byte slice & passing to write func
-
-		response.WriteJson(w, http.StatusCreated, map[string]string{"success": "OK"}) // code 201- created
+		response.WriteJson(w, http.StatusCreated, map[string]int64{"id": lastId}) // code 201- created
 	}
 }
