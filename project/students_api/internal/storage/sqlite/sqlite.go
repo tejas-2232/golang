@@ -2,9 +2,11 @@ package sqlite
 
 import (
 	"database/sql" //provides interfaces to work with databases
+	"fmt"
 
 	_ "github.com/mattn/go-sqlite3"
 	"github.com/tejas-2232/students_api/internal/config"
+	"github.com/tejas-2232/students_api/internal/types"
 )
 
 type Sqlite struct {
@@ -60,4 +62,31 @@ func (s *Sqlite) CreateStudent(name string, email string, age int) (int64, error
 
 	return lastId, nil // its returing like ( int64, error)
 
+}
+
+func (s *Sqlite) GetStudentById(id int64) (types.Student, error) {
+	stmt, err := s.Db.Prepare("SELECT * FROM students where id = ? LIMIT 1")
+
+	if err != nil {
+		return types.Student{}, err
+	}
+
+	defer stmt.Close()
+
+	var student types.Student
+
+	// QueryRow is used to query a single row to get the student details
+	// scan is used to scan the row into the struct data
+	// order matches the order of the columns in the database
+	err = stmt.QueryRow(id).Scan(&student.Id, &student.Name, &student.Email, &student.Age)
+
+	if err != nil {
+		if err == sql.ErrNoRows {
+			return types.Student{}, fmt.Errorf("no student found with id %s", fmt.Sprint(id))
+		}
+		return types.Student{}, fmt.Errorf("query error: %w", err)
+
+	}
+
+	return student, nil
 }
