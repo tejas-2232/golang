@@ -7,6 +7,7 @@ import (
 	"io"
 	"log/slog"
 	"net/http"
+	"strconv"
 
 	"github.com/go-playground/validator/v10"
 	"github.com/tejas-2232/students_api/internal/storage"
@@ -56,4 +57,37 @@ func New(storage storage.Storage) http.HandlerFunc {
 		// w.Write([]byte("Welcome to students API")) //converting string to byte slice & passing to write func
 		response.WriteJson(w, http.StatusCreated, map[string]int64{"id": lastId}) // code 201- created
 	}
+} // end of New
+
+func GetByID(storage storage.Storage) http.HandlerFunc {
+	return func(w http.ResponseWriter, r *http.Request) {
+		id := r.PathValue("id")
+		slog.Info("Getting student by ID", slog.String("id", id))
+
+		intID, err := strconv.ParseInt(id, 10, 64)
+
+		if err != nil {
+			response.WriteJson(w, http.StatusBadRequest, response.GeneralError(err))
+			return
+		}
+
+		student, err := storage.GetStudentById(intID)
+		if err != nil {
+			slog.Error("error getting user", slog.String("id", id))
+
+			response.WriteJson(w, http.StatusInternalServerError, response.GeneralError(err))
+			return
+		}
+
+		// serialize the student data to JSON and send it as a response
+		response.WriteJson(w, http.StatusOK, student)
+		// why two response statements are used?
+		// the reason is that, in the above code, we are returning
+		// an error response, and then we are returning a success response
+		// this is because we are validating the request data, and if the data is invalid
+		// we are returning an error response, and if the data is valid, we are returning
+		// a success response
+
+	}
+
 }
