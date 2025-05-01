@@ -2,6 +2,9 @@
 
 
 
+### Tools/Packages Required
+
+[MinGW64, TablePlus(for GUI of database) ]
 
 ### packages
 
@@ -55,4 +58,20 @@ func main() {
 
 We will be using TablePlus for Graphical User Interface
 
-![alt text](assets/image.png)
+![alt text](assets/tablePlus_home.png)
+
+<hr>
+
+__after calling the API via postman__
+
+__POST Request__
+``` http://localhost:8081/api/students```
+
+![Id1_created Image](assets/Id_created_postman.png)
+
+<hr>
+
+__GET Request__
+``` http://localhost:8081/api/students/1```
+
+![Id1_get Image](assets/Id1_get_postman.png)
