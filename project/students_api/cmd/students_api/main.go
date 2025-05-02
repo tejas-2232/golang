@@ -31,9 +31,10 @@ func main() {
 
 	// setup router
 	router := http.NewServeMux()
-
+	// adding handlers
 	router.HandleFunc("POST /api/students", student.New(storage))
 	router.HandleFunc("GET /api/students/{id}", student.GetByID(storage))
+	router.HandleFunc("GET /api/students", student.GetList(storage))
 
 	// setup server
 	server := http.Server{
@@ -43,7 +44,7 @@ func main() {
 
 	slog.Info("server started %s", slog.String("address", cfg.HTTPServer.Addr))
 
-	fmt.Printf("server started %s", cfg.HTTPServer.Addr)
+	fmt.Printf("server started at", cfg.HTTPServer.Addr)
 
 	// create channel
 	// creating this because, if we interuppt the cmd, it will show the interupption in cmd
