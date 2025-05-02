@@ -90,3 +90,38 @@ func (s *Sqlite) GetStudentById(id int64) (types.Student, error) {
 
 	return student, nil
 }
+
+func (s *Sqlite) GetStudents() ([]types.Student, error) {
+	stmt, err := s.Db.Prepare("SELECT id, name, email, age FROM students")
+
+	if err != nil {
+		return nil, err
+	}
+	defer stmt.Close()
+
+	rows, err := stmt.Query() // Query returns a rows and error
+
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close() // closing rows
+
+	var students []types.Student // sytoring records in students
+
+	for rows.Next() {
+		var student types.Student
+
+		err := rows.Scan(&student.Id, &student.Name, &student.Email, &student.Age)
+
+		if err != nil {
+			return nil, err
+		}
+		// if everything is right then append the student to the students slice
+		// append is a built-in function that adds the student to the end of the students slice.
+		// it returns a new slice that contains the original slice and the new element.
+		// the new slice is then assigned back to the students variable.
+		// this is how we build up the list of students in the students slice.
+		students = append(students, student)
+	}
+	return students, nil
+}
