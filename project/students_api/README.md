@@ -4,22 +4,26 @@
 
 ```
 students_api
+├── assets
 ├── cmd
 │   └── students_api
 │       └── main.go
 ├── internal
+│   ├── config
+│   │   └── config.go
 │   ├── http
 │   │   └── handlers
 │   │       └── student
 │   │           └── student.go
 │   ├── storage
+│   │   ├── storage.go
 │   │   └── sqlite
 │   │       └── sqlite.go
-│   └── types
-│       └── types.go
-├── utils
-│   └── response
-│       └── response.go
+│   ├── types
+│   │   └── types.go
+│   └── utils
+│       └── response
+│           └── response.go
 └── README.md
 ```
 
