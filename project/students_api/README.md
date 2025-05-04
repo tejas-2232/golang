@@ -161,3 +161,25 @@ __GET Request__
 
 ![Id1_get Image](assets/Id1_get_postman.png)
 
+<hr>
+
+__PUT Request__
+``` http://localhost:8081/api/students/1```
+
+![Id1_put Image](assets/update_request.png)
+
+
+<hr>
+
+### update errors & Handling
+
+Error when someone tries to update record that doesn't exist
+
+![update_error Image](assets/update_error.png)
+
+<hr>
+
+#### Error when age field is missing
+
+![update_error Image](assets/update_error_age.png)
+
