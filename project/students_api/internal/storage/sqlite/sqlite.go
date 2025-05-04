@@ -70,11 +70,8 @@ func (s *Sqlite) GetStudentById(id int64) (types.Student, error) {
 	if err != nil {
 		return types.Student{}, err
 	}
-
 	defer stmt.Close()
-
 	var student types.Student
-
 	// QueryRow is used to query a single row to get the student details
 	// scan is used to scan the row into the struct data
 	// order matches the order of the columns in the database
@@ -124,4 +121,29 @@ func (s *Sqlite) GetStudents() ([]types.Student, error) {
 		students = append(students, student)
 	}
 	return students, nil
+}
+
+func (s *Sqlite) UpdateStudentById(id int64, name string, email string, age int) error {
+	stmt, err := s.Db.Prepare("UPDATE students SET name = ?, email = ?, age = ? WHERE id = ?")
+
+	if err != nil {
+		return err
+	}
+	defer stmt.Close()
+	//execute the update query
+	result, err := stmt.Exec(name, email, age, id)
+
+	if err != nil {
+		return err
+	}
+
+	//check if any rows were affected
+	rowsAffected, err := result.RowsAffected()
+	if err != nil {
+		return err
+	}
+	if rowsAffected == 0 {
+		return fmt.Errorf("no student found with id %s", fmt.Sprint(id))
+	}
+	return nil
 }
