@@ -147,3 +147,35 @@ func (s *Sqlite) UpdateStudentById(id int64, name string, email string, age int)
 	}
 	return nil
 }
+
+// delete student by id
+func (s *Sqlite) DeleteStudentById(id int64) error {
+	stmt, err := s.Db.Prepare("DELETE FROM students WHERE id = ?")
+
+	if err != nil {
+		return err
+	}
+
+	defer stmt.Close()
+
+	//execute the delete query
+	result, err := stmt.Exec(id)
+	if err != nil {
+		return err
+	}
+
+	//check if any rows were affected
+	rowsAffected, err := result.RowsAffected()
+	if err != nil {
+		return err
+	}
+	if rowsAffected == 0 {
+		return fmt.Errorf("no student found with id %s", fmt.Sprint(id))
+	}
+	return nil
+}
+
+// close the database connection
+func (s *Sqlite) Close() error {
+	return s.Db.Close()
+}
