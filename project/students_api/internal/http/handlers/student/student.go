@@ -30,7 +30,6 @@ func New(storage storage.Storage) http.HandlerFunc {
 			return
 		}
 		// IF error is other than empty body
-
 		if err != nil {
 			response.WriteJson(w, http.StatusBadRequest, response.GeneralError(err))
 			return
@@ -74,11 +73,9 @@ func GetByID(storage storage.Storage) http.HandlerFunc {
 		student, err := storage.GetStudentById(intID)
 		if err != nil {
 			slog.Error("error getting user", slog.String("id", id))
-
 			response.WriteJson(w, http.StatusInternalServerError, response.GeneralError(err))
 			return
 		}
-
 		// serialize the student data to JSON and send it as a response
 		response.WriteJson(w, http.StatusOK, student)
 		// why two response statements are used?
@@ -87,9 +84,7 @@ func GetByID(storage storage.Storage) http.HandlerFunc {
 		// this is because we are validating the request data, and if the data is invalid
 		// we are returning an error response, and if the data is valid, we are returning
 		// a success response
-
 	}
-
 }
 
 func GetList(storage storage.Storage) http.HandlerFunc {
@@ -104,5 +99,49 @@ func GetList(storage storage.Storage) http.HandlerFunc {
 		//success response
 		response.WriteJson(w, http.StatusOK, students)
 
+	}
+}
+
+// write fuunction UpdateByID
+
+func UpdateByID(storage storage.Storage) http.HandlerFunc {
+	return func(w http.ResponseWriter, r *http.Request) {
+		id := r.PathValue("id")
+		slog.Info("Updating student by ID", slog.String("id", id))
+
+		// / Convert ID to int64
+		intID, err := strconv.ParseInt(id, 10, 64)
+
+		if err != nil {
+			response.WriteJson(w, http.StatusBadRequest, response.GeneralError(err))
+			return
+		}
+
+		//parse request body
+		var student types.Student
+		err = json.NewDecoder(r.Body).Decode(&student)
+
+		if err != nil {
+			response.WriteJson(w, http.StatusBadRequest, response.GeneralError(fmt.Errorf("failed to parse request body: %v", err)))
+			return
+		}
+
+		//validate request body
+		if err := validator.New().Struct(student); err != nil {
+			validateErrs := err.(validator.ValidationErrors) //type casting the error, type is ValidationErrors
+
+			response.WriteJson(w, http.StatusBadRequest, response.ValidationError(validateErrs))
+			return
+		}
+
+		//update student in storage
+		updateErr := storage.UpdateStudentById(intID, student.Name, student.Email, student.Age)
+
+		if updateErr != nil {
+			response.WriteJson(w, http.StatusInternalServerError, response.GeneralError(updateErr))
+			return
+		}
+		// return updated student id
+		response.WriteJson(w, http.StatusOK, intID)
 	}
 }
