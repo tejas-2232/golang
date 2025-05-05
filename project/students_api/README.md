@@ -110,7 +110,7 @@ __To install this package, run the below command:__
 go get github.com/mattn/go-sqlite3
 ```
 
-__Example to check SQLite3 Database!:__
+### Example to check SQLite3 Database:
 
 ```go
 package main
@@ -147,7 +147,7 @@ We will be using TablePlus for Graphical User Interface
 
 <hr>
 
-__after calling the API via postman__
+#### after calling the API via postman
 
 __POST Request__
 ``` http://localhost:8081/api/students```
@@ -183,3 +183,37 @@ Error when someone tries to update record that doesn't exist
 
 ![update_error Image](assets/update_error_age.png)
 
+
+### delete student
+
+
+
+### SQLite Auto-Increment - reset sequence method
+
+__How SQLite Auto-Increment Works__
+
+* SQLite uses an internal table sqlite_sequence to track the last used ID for tables with AUTOINCREMENT
+* When you delete a record, the ID is not automatically reused
+* This method manually resets the sequence to the maximum existing ID
+
+__Key Changes__
+
+* Added resetSequence() method to:
+    * Find the maximum existing ID
+    * Clear the current sequence
+    * Set the sequence to the maximum ID
+    
+* Modified DeleteStudentById() to:
+    * Call resetSequence() after successful deletion
+    * Ensures next insert will use the lowest available ID
+
+__Benefits__
+
+* Fills gaps in ID sequence
+* Prevents ID from continuously increasing
+* Maintains a compact, sequential ID numbering
+
+__Example Scenario__
+* You have records with IDs: 1, 2, 3, 4, 5
+* Delete record with ID 5
+* Next insert will use ID 5, not 6
