@@ -26,7 +26,7 @@ func New(cfg *config.Config) (*Sqlite, error) {
 	id INTEGER PRIMARY KEY AUTOINCREMENT,
 	name TEXT,
 	email TEXT,
-	age INTEGER
+	age INTEGER	
 	)`)
 
 	if err != nil {
@@ -148,31 +148,51 @@ func (s *Sqlite) UpdateStudentById(id int64, name string, email string, age int)
 	return nil
 }
 
-// delete student by id
-func (s *Sqlite) DeleteStudentById(id int64) error {
-	stmt, err := s.Db.Prepare("DELETE FROM students WHERE id = ?")
-
+// resetSequence resets the auto-increment sequence to the maximum existing ID
+func (s *Sqlite) resetSequence() error {
+	// Find the maximum existing ID
+	var maxID int64
+	err := s.Db.QueryRow("SELECT COALESCE(MAX(id), 0) FROM students").Scan(&maxID)
 	if err != nil {
 		return err
 	}
 
+	// Reset the sequence
+	_, err = s.Db.Exec("DELETE FROM sqlite_sequence WHERE name='students'")
+	if err != nil {
+		return err
+	}
+
+	_, err = s.Db.Exec("INSERT INTO sqlite_sequence (name, seq) VALUES ('students', ?)", maxID)
+	return err
+}
+
+// delete student by id
+func (s *Sqlite) DeleteStudentById(id int64) error {
+	stmt, err := s.Db.Prepare("DELETE FROM students WHERE id = ?")
+	if err != nil {
+		return err
+	}
 	defer stmt.Close()
 
-	//execute the delete query
+	// Execute the delete query
 	result, err := stmt.Exec(id)
 	if err != nil {
 		return err
 	}
 
-	//check if any rows were affected
+	// Check if any rows were affected
 	rowsAffected, err := result.RowsAffected()
 	if err != nil {
 		return err
 	}
+
 	if rowsAffected == 0 {
 		return fmt.Errorf("no student found with id %s", fmt.Sprint(id))
 	}
-	return nil
+
+	// Reset the sequence after deletion
+	return s.resetSequence()
 }
 
 // close the database connection
