@@ -107,7 +107,7 @@ func GetList(storage storage.Storage) http.HandlerFunc {
 func UpdateByID(storage storage.Storage) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		id := r.PathValue("id")
-		slog.Info("Updating student by ID", slog.String("id", id))
+		slog.Info("Updating student by ID", slog.String("=", id))
 
 		// / Convert ID to int64
 		intID, err := strconv.ParseInt(id, 10, 64)
@@ -142,6 +142,32 @@ func UpdateByID(storage storage.Storage) http.HandlerFunc {
 			return
 		}
 		// return updated student id
+		response.WriteJson(w, http.StatusOK, intID)
+	}
+}
+
+// write function DeleteByID
+
+func DeleteByID(storage storage.Storage) http.HandlerFunc {
+	return func(w http.ResponseWriter, r *http.Request) {
+		id := r.PathValue("id")
+		slog.Info("Deleting student by ID", slog.String("=", id))
+
+		intID, err := strconv.ParseInt(id, 10, 64)
+
+		if err != nil {
+			response.WriteJson(w, http.StatusBadRequest, response.GeneralError(err))
+			return
+		}
+
+		//delete student in storage
+		deleteErr := storage.DeleteStudentById(intID)
+
+		if deleteErr != nil {
+			response.WriteJson(w, http.StatusInternalServerError, response.GeneralError(deleteErr))
+			return
+		}
+		// return deleted student id
 		response.WriteJson(w, http.StatusOK, intID)
 	}
 }
