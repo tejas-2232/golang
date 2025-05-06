@@ -27,7 +27,7 @@ func New(cfg *config.Config) (*Sqlite, error) {
 	name TEXT,
 	email TEXT,
 	age INTEGER	
-	)`)
+	) WITHOUT ROWID`)
 
 	if err != nil {
 		return nil, err
@@ -169,7 +169,16 @@ func (s *Sqlite) resetSequence() error {
 
 // delete student by id
 func (s *Sqlite) DeleteStudentById(id int64) error {
-	stmt, err := s.Db.Prepare("DELETE FROM students WHERE id = ?")
+	// start a transaction
+
+	tx, err := s.Db.Begin()
+	if err != nil {
+		return err
+	}
+	defer tx.Rollback()
+
+	//delete a student from the database
+	stmt, err := tx.Prepare("DELETE FROM students WHERE id = ?")
 	if err != nil {
 		return err
 	}
@@ -191,8 +200,22 @@ func (s *Sqlite) DeleteStudentById(id int64) error {
 		return fmt.Errorf("no student found with id %s", fmt.Sprint(id))
 	}
 
+	// Reorder the remaining entries
+	reorderStmt, err := tx.Prepare("UPDATE students SET id = id - 1 WHERE id > ?")
+
+	if err != nil {
+		return err
+	}
+	defer reorderStmt.Close()
+
+	_, err = reorderStmt.Exec(id)
+	if err != nil {
+		return err
+	}
+	// commit the transaction
+	return tx.Commit()
 	// Reset the sequence after deletion
-	return s.resetSequence()
+	// return s.resetSequence()
 }
 
 // close the database connection
