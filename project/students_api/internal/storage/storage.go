@@ -7,6 +7,7 @@ type Storage interface {
 	GetStudentById(id int64) (types.Student, error)
 	GetStudents() ([]types.Student, error) // returning slice of Student struct
 	UpdateStudentById(id int64, name string, email string, age int) error
+	DeleteStudentById(id int64) error
 	// implement this methid in sqlite.go
 
 }
