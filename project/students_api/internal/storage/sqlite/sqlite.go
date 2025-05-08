@@ -27,7 +27,7 @@ func New(cfg *config.Config) (*Sqlite, error) {
 	name TEXT,
 	email TEXT,
 	age INTEGER	
-	) WITHOUT ROWID`)
+	)`)
 
 	if err != nil {
 		return nil, err
